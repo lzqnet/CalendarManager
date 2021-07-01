@@ -1,0 +1,3 @@
+include ':lzqcalendar'
+include ':app'
+rootProject.name = "CalendarManager"
