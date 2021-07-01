@@ -4,7 +4,6 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.ContentValues
 import android.database.Cursor
-import android.net.Uri
 import android.provider.CalendarContract
 import android.util.Log
 
@@ -14,8 +13,12 @@ class ReminderWrapper {
         if (reminders != null && reminders.size > 0) {
             for (data in reminders) {
                 if (data.MINUTES == (reminder.MINUTES)
-                        && data.METHOD == reminder.METHOD) {
-                            Log.d("lzqtest", "ReminderWrapper.addReminder: alread exist reminder=$reminders ")
+                    && data.METHOD == reminder.METHOD
+                ) {
+                    Log.d(
+                        "lzqtest",
+                        "ReminderWrapper.addReminder: alread exist reminder=$reminders "
+                    )
                     return CalendarStatus.ALREADY_EXIST.value()
                 }
             }
@@ -33,10 +36,10 @@ class ReminderWrapper {
         if (reminder.MINUTES != null) {
             contentValues.put(CalendarContract.Reminders.MINUTES, reminder.MINUTES)
         }
-Log.d("lzqtest", "ReminderWrapper.addReminder: add reminder now ")
-        val ret= resolver.insert(CalendarContract.Reminders.CONTENT_URI, contentValues)
+        Log.d("lzqtest", "ReminderWrapper.addReminder: add reminder now ")
+        val ret = resolver.insert(CalendarContract.Reminders.CONTENT_URI, contentValues)
         Log.d("lzqtest", "ReminderWrapper.addReminder: result ret=$ret ")
-        return if(ret==null) CalendarStatus.FAIL.value() else ContentUris.parseId(ret)
+        return if (ret == null) CalendarStatus.FAIL.value() else ContentUris.parseId(ret)
     }
 
     fun queryReminder(id: Int?, resolver: ContentResolver): ArrayList<Reminder> {
@@ -46,12 +49,12 @@ Log.d("lzqtest", "ReminderWrapper.addReminder: add reminder now ")
         }
         val selection: String = "(${CalendarContract.Reminders._ID} = ?)"
         val selectionArgs: Array<String> = arrayOf(
-                id.toString()
+            id.toString()
         )
 
         resolver.query(
-                CalendarContract.Reminders.CONTENT_URI,
-                null, selection, selectionArgs, null
+            CalendarContract.Reminders.CONTENT_URI,
+            null, selection, selectionArgs, null
         ).use { cursor ->
             val ret = readReminder(cursor)
             reminders.addAll(ret)
@@ -68,12 +71,12 @@ Log.d("lzqtest", "ReminderWrapper.addReminder: add reminder now ")
         }
         val selection: String = "(${CalendarContract.Reminders.EVENT_ID} = ?)"
         val selectionArgs: Array<String> = arrayOf(
-                eventId.toString()
+            eventId.toString()
         )
 
         resolver.query(
-                CalendarContract.Reminders.CONTENT_URI,
-                null, selection, selectionArgs, null
+            CalendarContract.Reminders.CONTENT_URI,
+            null, selection, selectionArgs, null
         ).use { cursor ->
             val ret = readReminder(cursor)
             reminders.addAll(ret)
@@ -115,10 +118,11 @@ Log.d("lzqtest", "ReminderWrapper.addReminder: add reminder now ")
         }
         val selection: String = "(${CalendarContract.Reminders._ID} = ?)"
         val selectionArgs: Array<String> = arrayOf(
-                id.toString()
+            id.toString()
         )
         return resolver.delete(
-                CalendarContract.Reminders.CONTENT_URI, selection, selectionArgs)
+            CalendarContract.Reminders.CONTENT_URI, selection, selectionArgs
+        )
     }
 
     fun deleteReminderByEventId(eventId: Int?, resolver: ContentResolver): Int {
@@ -127,10 +131,11 @@ Log.d("lzqtest", "ReminderWrapper.addReminder: add reminder now ")
         }
         val selection: String = "(${CalendarContract.Reminders.EVENT_ID} = ?)"
         val selectionArgs: Array<String> = arrayOf(
-                eventId.toString()
+            eventId.toString()
         )
         return resolver.delete(
-                CalendarContract.Reminders.CONTENT_URI, selection, selectionArgs)
+            CalendarContract.Reminders.CONTENT_URI, selection, selectionArgs
+        )
     }
 
 
